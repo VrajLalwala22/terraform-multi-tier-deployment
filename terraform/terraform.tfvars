@@ -1,5 +1,5 @@
-tier       = "2-tier"
+tier       = "3-tier"
 os         = "ubuntu"
 preference = "cost"
-repo_url   = "https://github.com/VrajLalwala22/bookstore-api.git"
+repo_url   = "https://github.com/VrajLalwala22/Speed-rental"
 aws_region = "ap-south-1"
