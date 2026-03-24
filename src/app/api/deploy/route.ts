@@ -64,8 +64,9 @@ repo_url = "${repoUrl}"
             controller.close();
           });
         });
-      } catch (err: any) {
-        send(`[System Error]: ${err.message}`);
+      } catch (err) {
+        const errorMessage = err instanceof Error ? err.message : String(err);
+        send(`[System Error]: ${errorMessage}`);
         controller.close();
       }
     }

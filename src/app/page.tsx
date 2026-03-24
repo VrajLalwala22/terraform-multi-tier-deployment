@@ -52,12 +52,14 @@ export default function Dashboard() {
               try {
                 const parsed = JSON.parse(line.substring(6));
                 setLogs((prev) => [...prev, parsed.log]);
-              } catch (err) {}
+              } catch {
+                // Ignore parse errors from chunking
+              }
             }
           }
         }
       }
-    } catch (err) {
+    } catch {
       setLogs((prev) => [...prev, "Connection error occurred."]);
     }
     setIsDeploying(false);
