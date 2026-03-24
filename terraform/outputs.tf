@@ -6,3 +6,7 @@ output "ssh_command" {
 output "ec2_public_ip" {
   value = var.tier == "1-tier" ? module.ec2[0].public_ip : (var.tier == "2-tier" ? module.ec2_2tier[0].public_ip : null)
 }
+
+output "alb_dns_name" {
+  value = var.tier == "3-tier" ? module.alb[0].dns_name : null
+}
