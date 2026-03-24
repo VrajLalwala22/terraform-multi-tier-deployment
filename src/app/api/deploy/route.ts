@@ -16,12 +16,12 @@ export async function POST(req: NextRequest) {
         const body = await req.json();
         const { awsAccessKey, awsSecretKey, awsRegion, tier, os, preference, repoUrl } = body;
 
-        const tfVarsContent = `
-tier = "${tier}"
-os = "${os}"
+        const tfVarsContent = `tier       = "${tier}"
+os         = "${os}"
 preference = "${preference}"
-repo_url = "${repoUrl}"
-        `;
+repo_url   = "${repoUrl}"
+aws_region = "${awsRegion}"
+`;
 
         const tfPath = path.resolve(process.cwd(), "terraform");
 
