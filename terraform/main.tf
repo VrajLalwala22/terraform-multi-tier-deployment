@@ -11,11 +11,11 @@ provider "aws" {
 }
 
 # ============================================================
-# STEP 1: DYNAMIC AMI LOOKUPS (driven by OS selection in UI)
+# DYNAMIC AMI LOOKUPS
 # ============================================================
 data "aws_ami" "ubuntu" {
   most_recent = true
-  owners      = ["099720109477"] # Canonical
+  owners      = ["099720109477"]
   filter {
     name   = "name"
     values = ["ubuntu/images/hvm-ssd/ubuntu-jammy-22.04-amd64-server-*"]
@@ -24,7 +24,7 @@ data "aws_ami" "ubuntu" {
 
 data "aws_ami" "amazon_linux" {
   most_recent = true
-  owners      = ["137112412989"] # Amazon
+  owners      = ["137112412989"]
   filter {
     name   = "name"
     values = ["al2023-ami-2023.*-x86_64"]
@@ -32,7 +32,7 @@ data "aws_ami" "amazon_linux" {
 }
 
 # ============================================================
-# STEP 2: CENTRALIZED SSH KEY (Generated once, reused by all)
+# CENTRALIZED SSH KEY (one stable key for all deployments)
 # ============================================================
 resource "tls_private_key" "ssh_key" {
   algorithm = "RSA"
@@ -55,102 +55,89 @@ resource "local_file" "private_key_pem" {
 }
 
 # ============================================================
-# STEP 3: SMART DEPLOYMENT SCRIPTS
-# (Repo URL is embedded here — change triggers instance replace)
+# SMART DEPLOYMENT SCRIPTS
+# NOTE: These are in separate locals (Terraform doesn't support
+# inline ternary heredoc). repo_url is embedded so any URL
+# change auto-triggers instance replacement.
 # ============================================================
 locals {
-  ami_id = var.os == "ubuntu" ? data.aws_ami.ubuntu.id : data.aws_ami.amazon_linux.id
-
+  ami_id        = var.os == "ubuntu" ? data.aws_ami.ubuntu.id : data.aws_ami.amazon_linux.id
   instance_type = var.preference == "performance" ? "t3.small" : "t3.micro"
 
-  ssh_user = var.os == "ubuntu" ? "ubuntu" : "ec2-user"
-  repo_dir = var.os == "ubuntu" ? "/home/ubuntu/repo" : "/home/ec2-user/repo"
-
-  user_data = var.os == "ubuntu" ? <<-EOF
+  ubuntu_user_data = <<-EOF
     #!/bin/bash
     set -ex
     apt-get update -y
     apt-get install -y git nginx curl
 
-    # Clone the GitHub repository
     REPO_URL="${var.repo_url}"
-    REPO_DIR="${local.repo_dir}"
+    REPO_DIR="/home/ubuntu/repo"
     git clone "$REPO_URL" "$REPO_DIR"
     chown -R ubuntu:ubuntu "$REPO_DIR"
     cd "$REPO_DIR"
 
-    # Node.js project detection
     if [ -f "package.json" ]; then
-        echo "[CloudTier] Node.js project detected"
         curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
         apt-get install -y nodejs
         npm install
     fi
 
-    # Python project detection
     if [ -f "requirements.txt" ]; then
-        echo "[CloudTier] Python project detected"
         apt-get install -y python3-pip
         pip3 install -r requirements.txt
     fi
 
-    # Static HTML detection — serve via Nginx automatically
     if [ -f "index.html" ]; then
-        echo "[CloudTier] Static site detected — configuring Nginx"
         cp -r . /var/www/html/
         systemctl enable --now nginx
     fi
 
-    echo "[CloudTier] Setup Complete for ${var.repo_url}"
+    echo "CloudTier setup complete: ${var.repo_url}"
     EOF
-  : <<-EOF
+
+  amazon_user_data = <<-EOF
     #!/bin/bash
     set -ex
     dnf update -y
     dnf install -y git nginx curl
 
-    # Clone the GitHub repository
     REPO_URL="${var.repo_url}"
-    REPO_DIR="${local.repo_dir}"
+    REPO_DIR="/home/ec2-user/repo"
     git clone "$REPO_URL" "$REPO_DIR"
     chown -R ec2-user:ec2-user "$REPO_DIR"
     cd "$REPO_DIR"
 
-    # Node.js project detection
     if [ -f "package.json" ]; then
-        echo "[CloudTier] Node.js project detected"
         curl -fsSL https://rpm.nodesource.com/setup_20.x | bash -
         dnf install -y nodejs
         npm install
     fi
 
-    # Python project detection
     if [ -f "requirements.txt" ]; then
-        echo "[CloudTier] Python project detected"
         dnf install -y python3-pip
         pip3 install -r requirements.txt
     fi
 
-    # Static HTML detection — serve via Nginx automatically
     if [ -f "index.html" ]; then
-        echo "[CloudTier] Static site detected — configuring Nginx"
         cp -r . /usr/share/nginx/html/
         systemctl enable --now nginx
     fi
 
-    echo "[CloudTier] Setup Complete for ${var.repo_url}"
+    echo "CloudTier setup complete: ${var.repo_url}"
     EOF
+
+  user_data = var.os == "ubuntu" ? local.ubuntu_user_data : local.amazon_user_data
 }
 
 # ============================================================
-# STEP 4: VPC (Always created)
+# VPC
 # ============================================================
 module "vpc" {
   source = "./modules/vpc"
 }
 
 # ============================================================
-# STEP 5A: 1-TIER (Single EC2)
+# 1-TIER (Single EC2)
 # ============================================================
 module "ec2" {
   source = "./modules/ec2"
@@ -167,7 +154,7 @@ module "ec2" {
 }
 
 # ============================================================
-# STEP 5B: 2-TIER (EC2 + RDS)
+# 2-TIER (EC2 + RDS)
 # ============================================================
 module "ec2_2tier" {
   source = "./modules/ec2"
@@ -191,7 +178,7 @@ module "rds" {
 }
 
 # ============================================================
-# STEP 5C: 3-TIER (ALB + ASG + RDS)
+# 3-TIER (ALB + ASG + RDS)
 # ============================================================
 module "alb" {
   source         = "./modules/alb"

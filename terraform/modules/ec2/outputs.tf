@@ -1,3 +1,1 @@
-output "public_ip" {
-  value = aws_instance.app.public_ip
-}
+# public_ip is defined directly in main.tf
