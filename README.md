@@ -63,58 +63,11 @@ The project is designed for developers and DevOps engineers looking to automate 
                     └───────────────────────┘
 
 
-Developer
-   │
-   │  Code (Next.js App)
-   ▼
-GitHub Repository
-   │
-   │  Docker Build
-   ▼
-Docker Image
-   │
-   │ Push Image
-   ▼
-Container Registry (Docker Hub / ECR)
-   │
-   │ Terraform Provisioning
-   ▼
-Cloud Infrastructure
-   ├── VPC
-   ├── Subnets
-   ├── Security Groups
-   ├── Load Balancer
-   ├── EC2 / ECS / Kubernetes
-   └── Database (RDS)
-   │
-   ▼
-Running Container (Next.js App)
-   │
-   ▼
-Users Access via Public URL
+<img width="386" height="660" alt="image" src="https://github.com/user-attachments/assets/a5eda337-5a2c-446d-a090-b04e0e39594d" />
 
 
-                INTERNET
-                    │
-                    ▼
-            ┌──────────────┐
-            │ Load Balancer│
-            └──────┬───────┘
-                   │
-          ┌────────┴────────┐
-          │                 │
-          ▼                 ▼
-   ┌────────────┐    ┌────────────┐
-   │ App Server │    │ App Server │
-   │ Docker     │    │ Docker     │
-   │ Next.js    │    │ Next.js    │
-   └──────┬─────┘    └──────┬─────┘
-          │                 │
-          └────────┬────────┘
-                   ▼
-             ┌──────────┐
-             │ Database │
-             └──────────┘
+<img width="363" height="487" alt="image" src="https://github.com/user-attachments/assets/9862c5a9-3dbc-49c0-8a1c-2fd29ce3dbf9" />
+
 
 ## 🛠️ Tech Stack
 
