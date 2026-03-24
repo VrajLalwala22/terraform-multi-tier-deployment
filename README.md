@@ -1,264 +1,254 @@
-```markdown
 # 🚀 Terraform Multi-Tier Deployment
 
 <div align="center">
 
+![Logo](path-to-logo) <!-- TODO: Add project logo -->
+
 [![GitHub stars](https://img.shields.io/github/stars/VrajLalwala22/terraform-multi-tier-deployment?style=for-the-badge)](https://github.com/VrajLalwala22/terraform-multi-tier-deployment/stargazers)
 [![GitHub forks](https://img.shields.io/github/forks/VrajLalwala22/terraform-multi-tier-deployment?style=for-the-badge)](https://github.com/VrajLalwala22/terraform-multi-tier-deployment/network)
 [![GitHub issues](https://img.shields.io/github/issues/VrajLalwala22/terraform-multi-tier-deployment?style=for-the-badge)](https://github.com/VrajLalwala22/terraform-multi-tier-deployment/issues)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](LICENSE) <!-- TODO: Add actual license file if not MIT -->
+[![GitHub license](https://img.shields.io/github/license/VrajLalwala22/terraform-multi-tier-deployment?style=for-the-badge)](LICENSE) <!-- TODO: Add license file -->
 
-**Deploy a scalable, multi-tier web application and its infrastructure using Terraform and Docker.**
+**Automate the deployment of scalable multi-tier web applications using Terraform and Docker.**
 
-[Live Demo](https://demo-link.com) <!-- TODO: Add live demo link if available --> |
-[Documentation](https://docs-link.com) <!-- TODO: Add dedicated documentation link if available -->
+[Live Demo](https://demo-link.com) <!-- TODO: Add live demo link after deployment --> |
+[Documentation](https://docs-link.com) <!-- TODO: Add link to external documentation if applicable -->
 
 </div>
 
 ## 📖 Overview
 
-This repository provides a robust solution for deploying a multi-tier web application using Infrastructure as Code (IaC) principles with Terraform and containerization with Docker. The project features a modern Next.js frontend built with React, TypeScript, and Tailwind CSS, backed by a PostgreSQL database.
+This repository provides a robust Infrastructure-as-Code (IaC) solution for deploying a multi-tier web application, featuring a Next.js frontend, on a cloud provider using Terraform. It demonstrates how to containerize your application with Docker and orchestrate local development environments with Docker Compose, before provisioning the full infrastructure in the cloud.
 
-The core purpose of this repository is to demonstrate how to define, provision, and manage cloud infrastructure for a full-stack application in an automated, repeatable, and scalable manner. It's ideal for developers and DevOps engineers looking to understand or implement multi-tier deployments with Terraform.
+The project is designed for developers and DevOps engineers looking to automate and standardize the deployment of modern web applications, ensuring scalability, reliability, and easy reproducibility.
 
 ## ✨ Features
 
--   **Automated Infrastructure Provisioning**: Fully define and manage cloud resources using Terraform.
--   **Containerized Application Deployment**: The Next.js application is containerized with Docker, ensuring consistent environments.
--   **Multi-Tier Architecture**: Separates the presentation layer (Next.js web app) from the data layer (PostgreSQL database).
--   **Modern Web Frontend**: Built with Next.js, React, TypeScript, and styled with Tailwind CSS for a highly performant and maintainable UI.
--   **Relational Database**: Utilizes PostgreSQL for robust data storage.
--   **Local Development Setup**: Docker Compose for easy local spin-up of the application and database.
--   **Scalable & Maintainable**: Designed for easy extension and management of both application code and infrastructure.
+-   **Infrastructure as Code (IaC):** Provision and manage all cloud resources using Terraform.
+-   **Multi-Tier Architecture:** Set up distinct tiers for web (frontend) and potentially application logic.
+-   **Containerized Application:** Deploy the Next.js application using Docker containers.
+-   **Local Development Environment:** Utilize Docker Compose for a consistent local setup.
+-   **Scalable and Reproducible:** Design for easy scaling and environment replication.
+-   **Sample Next.js Application:** Includes a basic Next.js 14 application with TypeScript and Tailwind CSS as a deployment target.
+
+## 🖥️ Screenshots
+
+![Screenshot 1](path-to-screenshot) <!-- TODO: Add actual screenshots of deployed app or architecture diagram -->
+![Screenshot 2](path-to-screenshot) <!-- TODO: Add more relevant screenshots -->
 
 ## 🛠️ Tech Stack
 
-**Frontend:**
-![Next.js](https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=next.js&logoColor=white)
-![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
-![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
-![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
-![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=node.js&logoColor=white)
+**Infrastructure as Code:**
+[![Terraform](https://img.shields.io/badge/Terraform-7B42BC?style=for-the-badge&logo=terraform&logoColor=white)](https://www.terraform.io/)
 
-**Backend:**
-_(The Next.js application handles server-side rendering and can expose API routes. No dedicated separate backend framework detected.)_
+**Containerization:**
+[![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)](https://www.docker.com/)
+[![Docker Compose](https://img.shields.io/badge/Docker_Compose-0B598F?style=for-the-badge&logo=docker&logoColor=white)](https://docs.docker.com/compose/)
 
-**Database:**
-![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)
+**Cloud Platform:**
+[![Cloud Provider](https://img.shields.io/badge/Cloud_Provider-000000?style=for-the-badge&logoColor=white)](https://cloud.google.com/or-aws-or-azure) <!-- TODO: Specify actual cloud provider, e.g., AWS, Azure, GCP -->
 
-**DevOps & Infrastructure:**
-![Terraform](https://img.shields.io/badge/Terraform-7B42BC?style=for-the-badge&logo=terraform&logoColor=white)
-![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
-![Docker Compose](https://img.shields.io/badge/Docker_Compose-2496ED?style=for-the-badge&logo=docker&logoColor=white)
-![AWS](https://img.shields.io/badge/AWS-232F3E?style=for-the-badge&logo=amazon-aws&logoColor=white) <!-- Assuming AWS based on common Terraform examples for multi-tier -->
+**Frontend (Sample Application):**
+[![Next.js](https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=next.js&logoColor=white)](https://nextjs.org/)
+[![React](https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
+[![PostCSS](https://img.shields.io/badge/PostCSS-DD3A0A?style=for-the-badge&logo=postcss&logoColor=white)](https://postcss.org/)
+
+**Runtime & Tools:**
+[![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=node.js&logoColor=white)](https://nodejs.org/)
+[![npm](https://img.shields.io/badge/npm-CB3837?style=for-the-badge&logo=npm&logoColor=white)](https://www.npmjs.com/)
+[![ESLint](https://img.shields.io/badge/ESLint-4B32C3?style=for-the-badge&logo=eslint&logoColor=white)](https://eslint.org/)
 
 ## 🚀 Quick Start
 
-Follow these steps to get the application running locally or deploy it to your cloud provider using Terraform.
+Follow these steps to set up the project locally and deploy the infrastructure.
 
 ### Prerequisites
 
 Before you begin, ensure you have the following installed:
 
--   **Node.js** (v18 or higher recommended)
--   **npm** (comes with Node.js)
--   **Docker Desktop** (or Docker Engine)
--   **Terraform CLI** (v1.0 or higher recommended)
--   **AWS CLI** (configured with appropriate credentials for Terraform deployment)
+-   **Node.js** (LTS version, e.g., 18.x or 20.x) & **npm**
+-   **Docker** & **Docker Compose**: For running the application locally in containers.
+-   **Terraform CLI**: For provisioning cloud infrastructure.
+-   **Cloud Provider CLI**: (e.g., AWS CLI, gcloud CLI, Azure CLI) configured with appropriate credentials for your target cloud environment.
 
-### Local Development Setup (Docker Compose)
+### 1. Clone the repository
 
-This method allows you to run the Next.js application and PostgreSQL database locally using Docker Compose.
+```bash
+git clone https://github.com/VrajLalwala22/terraform-multi-tier-deployment.git
+cd terraform-multi-tier-deployment
+```
 
-1.  **Clone the repository**
-    ```bash
-    git clone https://github.com/VrajLalwala22/terraform-multi-tier-deployment.git
-    cd terraform-multi-tier-deployment
-    ```
+### 2. Set up the Sample Next.js Application
 
-2.  **Install Node.js dependencies for the Next.js app**
-    ```bash
-    npm install
-    ```
+This step prepares the application for local development or for building a Docker image.
 
-3.  **Build and run services with Docker Compose**
-    ```bash
-    docker-compose up --build
-    ```
-    This command will:
-    -   Build the Docker image for the Next.js application using the `Dockerfile`.
-    -   Start a PostgreSQL database container.
-    -   Connect the Next.js app to the database.
+```bash
+# Install Node.js dependencies
+npm install
 
-4.  **Open your browser**
-    The Next.js application will be available at `http://localhost:3000`.
+# Build the Next.js application for production
+npm run build
+```
 
-### Cloud Deployment Setup (Terraform)
+### 3. Local Development with Docker Compose
 
-This section outlines how to deploy the multi-tier architecture to your cloud provider using the Terraform configurations.
-_(Note: The `terraform/` directory should contain the `.tf` files for your cloud provider, e.g., AWS, GCP, Azure.)_
+To run the Next.js application locally using Docker Compose:
 
-1.  **Clone the repository** (if you haven't already)
-    ```bash
-    git clone https://github.com/VrajLalwala22/terraform-multi-tier-deployment.git
-    cd terraform-multi-tier-deployment
-    ```
+```bash
+# Build and start the services defined in docker-compose.yml
+docker-compose up --build
+```
 
-2.  **Navigate to the Terraform directory**
+The application should now be accessible at `http://localhost:3000`.
+
+### 4. Deploy Infrastructure with Terraform
+
+This section guides you through deploying the multi-tier infrastructure to your chosen cloud provider.
+
+1.  **Navigate to the Terraform directory:**
     ```bash
     cd terraform
     ```
 
-3.  **Initialize Terraform**
+2.  **Initialize Terraform:**
+    This command downloads the necessary provider plugins.
     ```bash
     terraform init
     ```
-    This command downloads the necessary provider plugins.
 
-4.  **Review the deployment plan**
+3.  **Review the plan:**
+    This command shows you what actions Terraform will perform without making any changes.
     ```bash
     terraform plan
     ```
-    This command shows you what actions Terraform will take to provision your infrastructure.
+    *Note: You may need to provide variable values via `.tfvars` file or command-line arguments. Refer to the `terraform` directory for variable definitions.*
 
-5.  **Apply the Terraform configuration**
+4.  **Apply the configuration:**
+    This command provisions the resources as defined in your Terraform configuration.
     ```bash
     terraform apply
     ```
-    Type `yes` when prompted to proceed with the infrastructure creation. Terraform will provision all defined resources, including the network, database, and application deployment services.
+    Confirm with `yes` when prompted.
 
-6.  **Destroy the infrastructure (when no longer needed)**
-    ```bash
-    terraform destroy
-    ```
-    This command will tear down all resources managed by this Terraform configuration. Type `yes` when prompted.
+5.  **Access the deployed application:**
+    After successful deployment, Terraform will output the public URL or IP address of your application.
 
 ## 📁 Project Structure
 
 ```
 terraform-multi-tier-deployment/
-├── .dockerignore              # Specifies files and directories to ignore when building Docker images
+├── .dockerignore              # Specifies files to ignore when building Docker images
 ├── .eslintrc.json             # ESLint configuration for code linting
 ├── .gitignore                 # Specifies intentionally untracked files to ignore
 ├── Dockerfile                 # Dockerfile for building the Next.js application image
-├── README.md                  # Project README file
-├── docker-compose.yml         # Defines services for local development with Docker Compose
+├── README.md                  # This README file
+├── docker-compose.yml         # Docker Compose configuration for local development
 ├── next.config.mjs            # Next.js configuration file
-├── package-lock.json          # Records the exact dependency tree
-├── package.json               # Defines project metadata and Node.js dependencies/scripts
+├── package-lock.json          # Lock file for npm dependencies
+├── package.json               # Node.js project manifest and scripts
 ├── postcss.config.mjs         # PostCSS configuration for styling
-├── src/                       # Source code for the Next.js web application
-│   ├── app/                   # Next.js App Router root
-│   │   ├── favicon.ico
-│   │   ├── globals.css
-│   │   └── page.tsx           # Main application page
-│   └── ...                    # Other Next.js specific files and components
-├── tailwind.config.ts         # Tailwind CSS configuration
-├── terraform/                 # Terraform configuration files for infrastructure provisioning
-│   ├── main.tf                # Main Terraform configuration
-│   ├── variables.tf           # Input variables for Terraform
-│   ├── outputs.tf             # Output values from Terraform
+├── src/                       # Source code for the Next.js application
+│   ├── app/                   # App Router specific pages, layouts, and components
+│   ├── components/            # Reusable UI components
+│   └── styles/                # Global styles and Tailwind CSS directives
+├── tailwind.config.ts         # Tailwind CSS configuration file
+├── terraform/                 # Terraform configurations for cloud infrastructure deployment
+│   ├── main.tf                # Main Terraform configuration file
+│   ├── variables.tf           # Input variables for Terraform modules
+│   ├── outputs.tf             # Output values from Terraform resources
 │   └── versions.tf            # Terraform and provider version constraints
 ├── tsconfig.json              # TypeScript configuration file
-└── ...                        # Other potential configuration or static files
+└── ...                        # Other configuration and project files
 ```
 
 ## ⚙️ Configuration
 
-### Environment Variables
+### Environment Variables (for Next.js Application)
 
-The Next.js application might require environment variables for database connection or other configurations. While no `.env.example` is explicitly present, you'll typically configure these:
+The Next.js application may use environment variables for configuration. While no `.env.example` is explicitly provided, typically you would create a `.env.local` file at the root of the project with variables such as:
 
--   **For Local Development (`docker-compose.yml`):** Variables can be directly defined in the `docker-compose.yml` file or in a `.env` file that `docker-compose` can read.
-    ```yaml
-    # Example in docker-compose.yml (if not explicitly in the provided snippet)
-    services:
-      web:
-        environment:
-          - DATABASE_URL=postgresql://user:password@db:5432/app_db
-    ```
--   **For Cloud Deployment (Terraform):** Environment-specific variables are often managed through Terraform input variables, AWS Secrets Manager, or similar cloud-native secret management services. Refer to `terraform/variables.tf` for defined variables.
+```
+# Example environment variables (adjust as needed)
+NEXT_PUBLIC_API_URL=http://localhost:8000/api
+```
 
-### Next.js Configuration
+### Terraform Variables
 
-The `next.config.mjs`, `tailwind.config.ts`, `postcss.config.mjs`, and `tsconfig.json` files provide configuration for the Next.js application, including build settings, styling, and TypeScript compilation.
-
-### Terraform Configuration
-
-The `terraform/` directory contains all Terraform `.tf` files. These files define the cloud resources, their configurations, and their interdependencies. Key files include:
--   `main.tf`: Contains the primary resource definitions.
--   `variables.tf`: Declares input variables that can be set during `terraform plan` or `terraform apply`.
--   `outputs.tf`: Defines output values that provide useful information about the deployed infrastructure.
+The `terraform` directory contains `variables.tf` where you can define input variables for customizing your deployment (e.g., region, instance types, database credentials). It is recommended to use a `terraform.tfvars` file or command-line arguments to pass sensitive or environment-specific values.
 
 ## 🔧 Development
 
 ### Available Scripts
 
-The `package.json` defines the following scripts for the Next.js application:
+In the Next.js application root (`./`):
 
-| Command      | Description                                       |
-| :----------- | :------------------------------------------------ |
-| `npm run dev`    | Starts the Next.js development server.            |
-| `npm run build`  | Creates an optimized production build of the app. |
-| `npm run start`  | Starts the Next.js production server.             |
-| `npm run lint`   | Runs ESLint to check for code quality issues.     |
+| Command       | Description                                  |
+| :------------ | :------------------------------------------- |
+| `npm run dev` | Starts the Next.js development server        |
+| `npm run build` | Builds the application for production usage |
+| `npm run start` | Starts the Next.js production server         |
+| `npm run lint` | Runs ESLint to check for code quality issues |
 
 ### Development Workflow
 
-1.  Start local services using `docker-compose up`.
-2.  In a separate terminal, run `npm run dev` to start the Next.js development server with hot-reloading.
-3.  Make changes to the `src/` directory.
-4.  View changes live in your browser at `http://localhost:3000`.
-
-## 🧪 Testing
-
-This project uses **ESLint** for code linting to ensure code quality and consistency.
-
-```bash
-# Run linting checks
-npm run lint
-```
-_(No dedicated unit or integration test framework like Jest or Cypress was explicitly detected in `package.json` or directory structure.)_
+1.  **Develop the Next.js App:** Make changes within the `src/` directory. Use `npm run dev` to see changes with hot-reloading.
+2.  **Containerize and Test Locally:** Use `docker-compose up --build` to test the application within its Docker container environment, simulating production closer.
+3.  **Update Infrastructure:** Modify `.tf` files in the `terraform/` directory to adjust cloud resources. Always `terraform plan` before `terraform apply`.
 
 ## 🚀 Deployment
 
-The primary deployment mechanism for this project's infrastructure is **Terraform**. Once your Terraform configuration is applied (as described in the [Cloud Deployment Setup](#cloud-deployment-setup-terraform) section), your multi-tier application will be running on your chosen cloud provider.
+### Production Build
 
-The `Dockerfile` provides the means to containerize the Next.js application. This Docker image can then be deployed to container services like AWS ECS, Kubernetes, or other container orchestration platforms, as defined in your Terraform files.
+To build the Next.js application for deployment:
+
+```bash
+npm run build
+```
+
+This creates the `.next` directory with optimized production assets.
+
+### Cloud Deployment
+
+The primary deployment method for the infrastructure is via Terraform:
+
+```bash
+# From the terraform/ directory
+terraform apply
+```
+
+The `Dockerfile` provides instructions to build a production-ready Docker image of the Next.js application, which can then be pushed to a container registry (e.g., Docker Hub, ECR) and referenced by your Terraform configurations for deployment on services like AWS ECS, Kubernetes, etc.
 
 ## 🤝 Contributing
 
-We welcome contributions to enhance this multi-tier deployment example! Please consider submitting pull requests for:
-
--   Adding support for other cloud providers (GCP, Azure).
--   Improving existing Terraform configurations for better security, cost-effectiveness, or scalability.
--   Enhancing the Next.js sample application.
--   Adding CI/CD pipelines.
--   Improving documentation.
-
-Please see our [Contributing Guide](CONTRIBUTING.md) for details on how to get started. <!-- TODO: Create CONTRIBUTING.md -->
+We welcome contributions to enhance this multi-tier deployment solution! Please refer to our [Contributing Guide](CONTRIBUTING.md) <!-- TODO: Add a CONTRIBUTING.md file --> for details on how to get started.
 
 ## 📄 License
 
-This project is licensed under the [MIT License](LICENSE) - see the [LICENSE](LICENSE) file for details. <!-- TODO: Confirm or create LICENSE file -->
+This project is licensed under the [LICENSE_NAME](LICENSE) - see the LICENSE file for details. <!-- TODO: Specify actual license and create LICENSE file -->
 
 ## 🙏 Acknowledgments
 
--   Thanks to the maintainers of **Next.js**, **React**, **TypeScript**, and **Tailwind CSS** for their incredible frameworks and tools.
--   Appreciation for **HashiCorp Terraform** and **Docker** for enabling efficient infrastructure and application deployment.
+-   Built with [Next.js](https://nextjs.org/) for the sample application.
+-   Utilizes [React](https://react.dev/) for an interactive user interface.
+-   Styled with [Tailwind CSS](https://tailwindcss.com/) for utility-first styling.
+-   Infrastructure managed by [Terraform](https://www.terraform.io/).
+-   Containerization handled by [Docker](https://www.docker.com/).
+-   Thanks to the maintainers of all dependencies for their amazing work.
 
 ## 📞 Support & Contact
 
+-   📧 Email: [contact@example.com] <!-- TODO: Add a contact email -->
 -   🐛 Issues: [GitHub Issues](https://github.com/VrajLalwala22/terraform-multi-tier-deployment/issues)
--   📧 Contact the author: [vrajlalwala@example.com] <!-- TODO: Add actual contact email -->
+-   💬 Discussions: [GitHub Discussions](https://github.com/VrajLalwala22/terraform-multi-tier-deployment/discussions) <!-- TODO: Enable GitHub Discussions if desired -->
 
 ---
 
 <div align="center">
 
-**⭐ Star this repo if you find it helpful!**
+**⭐ Star this repo if you find it helpful for your cloud deployments!**
 
 Made with ❤️ by [VrajLalwala22](https://github.com/VrajLalwala22)
 
 </div>
-```
