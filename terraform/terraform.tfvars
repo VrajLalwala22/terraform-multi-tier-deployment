@@ -1,6 +1,5 @@
-
-tier = "3-tier"
-os = "ubuntu"
+tier       = "2-tier"
+os         = "ubuntu"
 preference = "cost"
-repo_url = "https://github.com/VrajLalwala22/Car-rental.git"
-        
+repo_url   = "https://github.com/VrajLalwala22/bookstore-api.git"
+aws_region = "ap-south-1"

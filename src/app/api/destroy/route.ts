@@ -25,22 +25,36 @@ export async function POST(req: NextRequest) {
         };
 
         send("⚠️  Initiating DESTROY sequence...");
-        send("Running: terraform destroy -auto-approve\n");
+        send("Initializing Terraform configuration...\n");
 
-        const destroy = spawn("terraform", ["destroy", "-auto-approve"], { cwd: tfPath, env });
+        const init = spawn("terraform", ["init"], { cwd: tfPath, env });
+        
+        init.stdout.on("data", (data) => send(data.toString()));
+        init.stderr.on("data", (data) => send(data.toString()));
 
-        destroy.stdout.on("data", (data) => send(data.toString()));
-        destroy.stderr.on("data", (data) => send(data.toString()));
-
-        destroy.on("close", (code) => {
-          if (code === 0) {
-            send("\n=========================================");
-            send("✅ All infrastructure has been destroyed successfully.");
-            send("=========================================\n");
-          } else {
-            send(`\n[Error] Destroy failed with exit code ${code}.`);
+        init.on("close", (initCode) => {
+          if (initCode !== 0) {
+            send(`\n[Error] Terraform initialization failed with code ${initCode}.`);
+            controller.close();
+            return;
           }
-          controller.close();
+
+          send("\nRunning: terraform destroy -auto-approve\n");
+          const destroy = spawn("terraform", ["destroy", "-auto-approve"], { cwd: tfPath, env });
+
+          destroy.stdout.on("data", (data) => send(data.toString()));
+          destroy.stderr.on("data", (data) => send(data.toString()));
+
+          destroy.on("close", (code) => {
+            if (code === 0) {
+              send("\n=========================================");
+              send("✅ All infrastructure has been destroyed successfully.");
+              send("=========================================\n");
+            } else {
+              send(`\n[Error] Destroy failed with exit code ${code}.`);
+            }
+            controller.close();
+          });
         });
       } catch (err) {
         const errorMessage = err instanceof Error ? err.message : String(err);
