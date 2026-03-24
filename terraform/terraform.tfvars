@@ -1,5 +1,5 @@
-tier       = "3-tier"
+tier       = "2-tier"
 os         = "ubuntu"
 preference = "cost"
-repo_url   = "https://github.com/VrajLalwala22/Speed-rental"
+repo_url   = "https://github.com/pushkar-iamops/hello-world-flask.git"
 aws_region = "ap-south-1"
