@@ -33,8 +33,88 @@ The project is designed for developers and DevOps engineers looking to automate 
 
 ## 🖥️ Screenshots
 
-![Screenshot 1](path-to-screenshot) <!-- TODO: Add actual screenshots of deployed app or architecture diagram -->
-![Screenshot 2](path-to-screenshot) <!-- TODO: Add more relevant screenshots -->
+                    ┌───────────────────────┐
+                    │        User           │
+                    │   (Web Browser)       │
+                    └──────────┬────────────┘
+                               │
+                               ▼
+                    ┌───────────────────────┐
+                    │   DNS / Public URL    │
+                    └──────────┬────────────┘
+                               │
+                               ▼
+                    ┌───────────────────────┐
+                    │   Load Balancer       │
+                    │  (Cloud Provider)     │
+                    └──────────┬────────────┘
+                               │
+                               ▼
+                    ┌───────────────────────┐
+                    │   Web/App Tier        │
+                    │   Docker Container    │
+                    │   Next.js App         │
+                    └──────────┬────────────┘
+                               │
+                               ▼
+                    ┌───────────────────────┐
+                    │     Database Tier     │
+                    │   (RDS / Cloud DB)    │
+                    └───────────────────────┘
+
+
+Developer
+   │
+   │  Code (Next.js App)
+   ▼
+GitHub Repository
+   │
+   │  Docker Build
+   ▼
+Docker Image
+   │
+   │ Push Image
+   ▼
+Container Registry (Docker Hub / ECR)
+   │
+   │ Terraform Provisioning
+   ▼
+Cloud Infrastructure
+   ├── VPC
+   ├── Subnets
+   ├── Security Groups
+   ├── Load Balancer
+   ├── EC2 / ECS / Kubernetes
+   └── Database (RDS)
+   │
+   ▼
+Running Container (Next.js App)
+   │
+   ▼
+Users Access via Public URL
+
+
+                INTERNET
+                    │
+                    ▼
+            ┌──────────────┐
+            │ Load Balancer│
+            └──────┬───────┘
+                   │
+          ┌────────┴────────┐
+          │                 │
+          ▼                 ▼
+   ┌────────────┐    ┌────────────┐
+   │ App Server │    │ App Server │
+   │ Docker     │    │ Docker     │
+   │ Next.js    │    │ Next.js    │
+   └──────┬─────┘    └──────┬─────┘
+          │                 │
+          └────────┬────────┘
+                   ▼
+             ┌──────────┐
+             │ Database │
+             └──────────┘
 
 ## 🛠️ Tech Stack
 
