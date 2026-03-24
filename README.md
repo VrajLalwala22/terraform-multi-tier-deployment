@@ -64,7 +64,7 @@ The project is designed for developers and DevOps engineers looking to automate 
 
 
 <img width="386" height="660" alt="image" src="https://github.com/user-attachments/assets/a5eda337-5a2c-446d-a090-b04e0e39594d" />
-
+</br>
 
 <img width="386" height="660" alt="image" src="https://github.com/user-attachments/assets/9862c5a9-3dbc-49c0-8a1c-2fd29ce3dbf9" />
 
