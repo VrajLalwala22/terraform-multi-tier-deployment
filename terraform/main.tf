@@ -16,19 +16,37 @@ provider "aws" {
 data "aws_ami" "ubuntu" {
   most_recent = true
   owners      = ["099720109477"]
-  filter {
-    name   = "name"
-    values = ["ubuntu/images/hvm-ssd/ubuntu-jammy-22.04-amd64-server-*"]
-  }
+  filter { name = "name", values = ["ubuntu/images/hvm-ssd/ubuntu-jammy-22.04-amd64-server-*"] }
 }
-
 data "aws_ami" "amazon_linux" {
   most_recent = true
   owners      = ["137112412989"]
-  filter {
-    name   = "name"
-    values = ["al2023-ami-2023.*-x86_64"]
-  }
+  filter { name = "name", values = ["al2023-ami-2023.*-x86_64"] }
+}
+data "aws_ami" "debian" {
+  most_recent = true
+  owners      = ["136693020996"]
+  filter { name = "name", values = ["debian-12-amd64-*"] }
+}
+data "aws_ami" "windows" {
+  most_recent = true
+  owners      = ["801119661308"]
+  filter { name = "name", values = ["Windows_Server-2022-English-Full-Base-*"] }
+}
+data "aws_ami" "rhel" {
+  most_recent = true
+  owners      = ["309956199498"]
+  filter { name = "name", values = ["RHEL-9*-x86_64-*"] }
+}
+data "aws_ami" "suse" {
+  most_recent = true
+  owners      = ["amazon"]
+  filter { name = "name", values = ["*suse-sles-15*x86_64*"] }
+}
+data "aws_ami" "macos" {
+  most_recent = true
+  owners      = ["amazon"]
+  filter { name = "name", values = ["amzn-ec2-macos-14.*-x86_64_mac-*"] }
 }
 
 # ============================================================
@@ -61,38 +79,44 @@ resource "local_file" "private_key_pem" {
 # change auto-triggers instance replacement.
 # ============================================================
 locals {
-  ami_id        = var.os == "ubuntu" ? data.aws_ami.ubuntu.id : data.aws_ami.amazon_linux.id
-  instance_type = var.preference == "performance" ? "t3.small" : "t3.micro"
+  os_ami_map = {
+    "ubuntu"  = data.aws_ami.ubuntu.id
+    "amazon"  = data.aws_ami.amazon_linux.id
+    "debian"  = data.aws_ami.debian.id
+    "windows" = data.aws_ami.windows.id
+    "rhel"    = data.aws_ami.rhel.id
+    "suse"    = data.aws_ami.suse.id
+    "macos"   = data.aws_ami.macos.id
+  }
+  ami_id = lookup(local.os_ami_map, var.os, data.aws_ami.ubuntu.id)
+
+  base_instance_type = var.preference == "performance" ? "t3.small" : "t3.micro"
+  instance_type      = var.os == "macos" ? "mac1.metal" : local.base_instance_type
 
   ubuntu_user_data = <<-EOF
     #!/bin/bash
     set -ex
     apt-get update -y
     apt-get install -y git nginx curl
-
     REPO_URL="${var.repo_url}"
     REPO_DIR="/home/ubuntu/repo"
     git clone "$REPO_URL" "$REPO_DIR"
     chown -R ubuntu:ubuntu "$REPO_DIR"
     cd "$REPO_DIR"
-
     if [ -f "package.json" ]; then
         curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
         apt-get install -y nodejs
         npm install
     fi
-
     if [ -f "requirements.txt" ]; then
         apt-get install -y python3-pip
         pip3 install -r requirements.txt
     fi
-
     if [ -f "index.html" ]; then
         cp -r . /var/www/html/
         systemctl enable --now nginx
     fi
-
-    echo "CloudTier setup complete: ${var.repo_url}"
+    echo "CloudTier Ubuntu setup complete"
     EOF
 
   amazon_user_data = <<-EOF
@@ -100,33 +124,145 @@ locals {
     set -ex
     dnf update -y
     dnf install -y git nginx curl
-
     REPO_URL="${var.repo_url}"
     REPO_DIR="/home/ec2-user/repo"
     git clone "$REPO_URL" "$REPO_DIR"
     chown -R ec2-user:ec2-user "$REPO_DIR"
     cd "$REPO_DIR"
-
     if [ -f "package.json" ]; then
         curl -fsSL https://rpm.nodesource.com/setup_20.x | bash -
         dnf install -y nodejs
         npm install
     fi
-
     if [ -f "requirements.txt" ]; then
         dnf install -y python3-pip
         pip3 install -r requirements.txt
     fi
-
     if [ -f "index.html" ]; then
         cp -r . /usr/share/nginx/html/
         systemctl enable --now nginx
     fi
-
-    echo "CloudTier setup complete: ${var.repo_url}"
+    echo "CloudTier Amazon Linux setup complete"
     EOF
 
-  user_data = var.os == "ubuntu" ? local.ubuntu_user_data : local.amazon_user_data
+  debian_user_data = <<-EOF
+    #!/bin/bash
+    set -ex
+    apt-get update -y
+    apt-get install -y git nginx curl
+    REPO_URL="${var.repo_url}"
+    REPO_DIR="/home/admin/repo"
+    git clone "$REPO_URL" "$REPO_DIR"
+    chown -R admin:admin "$REPO_DIR"
+    cd "$REPO_DIR"
+    if [ -f "package.json" ]; then
+        curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
+        apt-get install -y nodejs
+        npm install
+    fi
+    if [ -f "requirements.txt" ]; then
+        apt-get install -y python3-pip
+        pip3 install -r requirements.txt --break-system-packages || pip3 install -r requirements.txt
+    fi
+    if [ -f "index.html" ]; then
+        cp -r . /var/www/html/
+        systemctl enable --now nginx
+    fi
+    EOF
+
+  rhel_user_data = <<-EOF
+    #!/bin/bash
+    set -ex
+    dnf update -y
+    dnf install -y git nginx curl python3-pip npm
+    REPO_URL="${var.repo_url}"
+    REPO_DIR="/home/ec2-user/repo"
+    git clone "$REPO_URL" "$REPO_DIR"
+    chown -R ec2-user:ec2-user "$REPO_DIR"
+    cd "$REPO_DIR"
+    if [ -f "package.json" ]; then
+        npm install
+    fi
+    if [ -f "requirements.txt" ]; then
+        pip3 install -r requirements.txt
+    fi
+    if [ -f "index.html" ]; then
+        cp -r . /usr/share/nginx/html/
+        systemctl enable --now nginx
+    fi
+    EOF
+
+  suse_user_data = <<-EOF
+    #!/bin/bash
+    set -ex
+    zypper refresh
+    zypper install -y git nginx curl python3-pip npm
+    REPO_URL="${var.repo_url}"
+    REPO_DIR="/home/ec2-user/repo"
+    git clone "$REPO_URL" "$REPO_DIR"
+    chown -R ec2-user:ec2-user "$REPO_DIR"
+    cd "$REPO_DIR"
+    if [ -f "package.json" ]; then
+        npm install
+    fi
+    if [ -f "requirements.txt" ]; then
+        pip3 install -r requirements.txt --break-system-packages || pip3 install -r requirements.txt
+    fi
+    if [ -f "index.html" ]; then
+        cp -r . /srv/www/htdocs/
+        systemctl enable --now nginx
+    fi
+    EOF
+
+  windows_user_data = <<-EOF
+<powershell>
+$ErrorActionPreference = "Stop"
+Invoke-WebRequest -Uri "https://github.com/git-for-windows/git/releases/download/v2.44.0.windows.1/Git-2.44.0-64-bit.exe" -OutFile "git.exe"
+Start-Process "git.exe" -ArgumentList "/SILENT" -Wait
+[Environment]::SetEnvironmentVariable("Path", $env:Path + ";C:\Program Files\Git\cmd", "Machine")
+
+Install-WindowsFeature -name Web-Server -IncludeManagementTools
+
+$RepoUrl = "${var.repo_url}"
+$RepoDir = "C:\repo"
+& "C:\Program Files\Git\cmd\git.exe" clone $RepoUrl $RepoDir
+
+if (Test-Path "$RepoDir\index.html") {
+    Copy-Item -Path "$RepoDir\*" -Destination "C:\inetpub\wwwroot\" -Recurse -Force
+}
+</powershell>
+EOF
+
+  macos_user_data = <<-EOF
+    #!/bin/bash
+    set -ex
+    su - ec2-user -c 'brew install git nginx node python'
+    REPO_URL="${var.repo_url}"
+    REPO_DIR="/Users/ec2-user/repo"
+    su - ec2-user -c "git clone $REPO_URL $REPO_DIR"
+    cd "$REPO_DIR"
+    if [ -f "package.json" ]; then
+        su - ec2-user -c "cd $REPO_DIR && npm install"
+    fi
+    if [ -f "requirements.txt" ]; then
+        su - ec2-user -c "cd $REPO_DIR && pip3 install -r requirements.txt --break-system-packages"
+    fi
+    if [ -f "index.html" ]; then
+        su - ec2-user -c "cp -r . /usr/local/var/www/"
+        su - ec2-user -c "brew services start nginx"
+    fi
+    EOF
+
+  user_data_map = {
+    "ubuntu"  = local.ubuntu_user_data
+    "amazon"  = local.amazon_user_data
+    "debian"  = local.debian_user_data
+    "windows" = local.windows_user_data
+    "rhel"    = local.rhel_user_data
+    "suse"    = local.suse_user_data
+    "macos"   = local.macos_user_data
+  }
+  user_data = lookup(local.user_data_map, var.os, local.ubuntu_user_data)
 }
 
 # ============================================================

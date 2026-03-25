@@ -212,9 +212,24 @@ export default function Dashboard() {
                         className="w-full bg-black/40 border border-white/10 rounded-lg p-3 outline-none focus:border-blue-500 transition-colors text-sm appearance-none">
                         <option value="ubuntu">Ubuntu 22.04 LTS</option>
                         <option value="amazon">Amazon Linux 2023</option>
+                        <option value="debian">Debian 12</option>
+                        <option value="windows">Windows Server 2022</option>
+                        <option value="rhel">Red Hat Enterprise Linux 9</option>
+                        <option value="suse">SUSE Linux Enterprise 15</option>
+                        <option value="macos">macOS Monterey (Metal)</option>
                       </select>
                     </div>
                   </div>
+
+                  {os === "macos" && (
+                    <div className="p-3 bg-red-950/40 border border-red-500/50 rounded-lg flex items-start gap-3">
+                      <span className="text-xl">⚠️</span>
+                      <div className="text-xs text-red-200 leading-relaxed">
+                        <strong className="block text-red-400 font-bold mb-1">CRITICAL BILLING WARNING</strong>
+                        AWS requires macOS to run on <strong>Dedicated Hosts (mac1.metal)</strong>. This guarantees a minimum billing of <strong>~$26 (24 hours minimum)</strong> even if you destroy the instance immediately. The deployment will fail safely unless you have manually allocated a Mac Dedicated Host in your AWS Console.
+                      </div>
+                    </div>
+                  )}
 
                   <div>
                     <label className="block text-xs uppercase tracking-widest text-gray-500 mb-1">Preference Goal</label>
