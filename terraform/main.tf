@@ -16,37 +16,58 @@ provider "aws" {
 data "aws_ami" "ubuntu" {
   most_recent = true
   owners      = ["099720109477"]
-  filter { name = "name", values = ["ubuntu/images/hvm-ssd/ubuntu-jammy-22.04-amd64-server-*"] }
+  filter {
+    name   = "name"
+    values = ["ubuntu/images/hvm-ssd/ubuntu-jammy-22.04-amd64-server-*"]
+  }
 }
 data "aws_ami" "amazon_linux" {
   most_recent = true
   owners      = ["137112412989"]
-  filter { name = "name", values = ["al2023-ami-2023.*-x86_64"] }
+  filter {
+    name   = "name"
+    values = ["al2023-ami-2023.*-x86_64"]
+  }
 }
 data "aws_ami" "debian" {
   most_recent = true
   owners      = ["136693020996"]
-  filter { name = "name", values = ["debian-12-amd64-*"] }
+  filter {
+    name   = "name"
+    values = ["debian-12-amd64-*"]
+  }
 }
 data "aws_ami" "windows" {
   most_recent = true
   owners      = ["801119661308"]
-  filter { name = "name", values = ["Windows_Server-2022-English-Full-Base-*"] }
+  filter {
+    name   = "name"
+    values = ["Windows_Server-2022-English-Full-Base-*"]
+  }
 }
 data "aws_ami" "rhel" {
   most_recent = true
   owners      = ["309956199498"]
-  filter { name = "name", values = ["RHEL-9*-x86_64-*"] }
+  filter {
+    name   = "name"
+    values = ["RHEL-9*-x86_64-*"]
+  }
 }
 data "aws_ami" "suse" {
   most_recent = true
   owners      = ["amazon"]
-  filter { name = "name", values = ["*suse-sles-15*x86_64*"] }
+  filter {
+    name   = "name"
+    values = ["*suse-sles-15*x86_64*"]
+  }
 }
 data "aws_ami" "macos" {
   most_recent = true
   owners      = ["amazon"]
-  filter { name = "name", values = ["amzn-ec2-macos-14.*-x86_64_mac-*"] }
+  filter {
+    name   = "name"
+    values = ["amzn-ec2-macos-14.*-x86_64_mac-*"]
+  }
 }
 
 # ============================================================
@@ -307,10 +328,11 @@ module "ec2_2tier" {
 }
 
 module "rds" {
-  source             = "./modules/rds"
-  count              = var.tier == "2-tier" ? 1 : 0
-  vpc_id             = module.vpc.vpc_id
-  private_subnet_ids = module.vpc.private_subnets
+  source                = "./modules/rds"
+  count                 = var.tier == "2-tier" ? 1 : 0
+  vpc_id                = module.vpc.vpc_id
+  private_subnet_ids    = module.vpc.private_subnets
+  app_security_group_id = one(module.ec2_2tier[*].security_group_id)
 }
 
 # ============================================================
@@ -319,24 +341,27 @@ module "rds" {
 module "alb" {
   source         = "./modules/alb"
   count          = var.tier == "3-tier" ? 1 : 0
+  vpc_id         = module.vpc.vpc_id
   public_subnets = module.vpc.public_subnets
 }
 
 module "autoscaling" {
-  source         = "./modules/autoscaling"
-  count          = var.tier == "3-tier" ? 1 : 0
-  public_subnets = module.vpc.public_subnets
-  ami_id         = local.ami_id
-  user_data      = local.user_data
-  instance_type  = local.instance_type
-  ssh_key_name   = aws_key_pair.ssh_key_pair.key_name
-  repo_url       = var.repo_url
-  vpc_id         = module.vpc.vpc_id
+  source           = "./modules/autoscaling"
+  count            = var.tier == "3-tier" ? 1 : 0
+  public_subnets   = module.vpc.public_subnets
+  ami_id           = local.ami_id
+  user_data        = local.user_data
+  instance_type    = local.instance_type
+  ssh_key_name     = aws_key_pair.ssh_key_pair.key_name
+  repo_url         = var.repo_url
+  vpc_id           = module.vpc.vpc_id
+  target_group_arn = one(module.alb[*].target_group_arn)
 }
 
 module "rds_3tier" {
-  source             = "./modules/rds"
-  count              = var.tier == "3-tier" ? 1 : 0
-  vpc_id             = module.vpc.vpc_id
-  private_subnet_ids = module.vpc.private_subnets
+  source                = "./modules/rds"
+  count                 = var.tier == "3-tier" ? 1 : 0
+  vpc_id                = module.vpc.vpc_id
+  private_subnet_ids    = module.vpc.private_subnets
+  app_security_group_id = one(module.autoscaling[*].security_group_id)
 }

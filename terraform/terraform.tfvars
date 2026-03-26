@@ -1,5 +1,5 @@
-tier       = "2-tier"
+tier       = "3-tier"
 os         = "ubuntu"
-preference = "cost"
-repo_url   = "https://github.com/pushkar-iamops/hello-world-flask.git"
+preference = "performance"
+repo_url   = "https://github.com/VrajLalwala22/3-tier-application-"
 aws_region = "ap-south-1"

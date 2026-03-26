@@ -50,6 +50,7 @@ resource "aws_autoscaling_group" "asg" {
   max_size            = 4
   min_size            = 1
   vpc_zone_identifier = var.public_subnets
+  target_group_arns   = [var.target_group_arn]
 
   launch_template {
     id      = aws_launch_template.app_lt.id
@@ -61,4 +62,8 @@ resource "aws_autoscaling_group" "asg" {
     value               = "CloudTier-ASG-Instance"
     propagate_at_launch = true
   }
+}
+
+output "security_group_id" {
+  value = aws_security_group.asg_sg.id
 }

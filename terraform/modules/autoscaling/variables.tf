@@ -7,3 +7,4 @@ variable "user_data" {}
 variable "instance_type" {}
 variable "vpc_id" {}
 variable "repo_url" {}
+variable "target_group_arn" {}
